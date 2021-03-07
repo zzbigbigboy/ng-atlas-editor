@@ -1,0 +1,112 @@
+<div id="editor_body" class="body">
+    <div class="content">
+        <div class="header">
+            <div class="btns">
+                <div nz-tooltip nzTooltipTitle="放大">
+                    <i nz-icon nzType="zoom-in" nzTheme="outline" (click)="onChangeZoom(0.1)"></i>
+                </div>
+                <div nz-tooltip nzTooltipTitle="缩小">
+                    <i nz-icon nzType="zoom-out" nzTheme="outline" (click)="onChangeZoom(-0.1)"></i>
+                </div>
+                <nz-divider nzType="vertical"></nz-divider>
+                <!-- <div nz-tooltip nzTooltipTitle="复制" (click)="onCopyNode(null)">
+                    <i nz-icon nzType="copy" nzTheme="outline"></i>
+                </div>
+                <div nz-tooltip nzTooltipTitle="粘贴" (click)="onPasteNode()" [class]="copyNode ? '':'disabled'">
+                    <i nz-icon nzType="diff" nzTheme="outline"></i>
+                </div> -->
+                <div nz-tooltip nzTooltipTitle="删除" (click)="onDeleteNode()"
+                    [class]="nodeModel.id || edgeModel.id ? '':'disabled'">
+                    <i nz-icon nzType="delete" nzTheme="outline"></i>
+                </div>
+                <div nz-tooltip nzTooltipTitle="展开右侧菜单" (click)="searchVisible = !searchVisible">
+                    <i nz-icon>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.05 14.2504C9.65001 13.8504 9.30001 13.4504 9.05001 12.9504C8.75001 12.3504 9.10001 11.6504 9.75001 11.5004C10.2 11.4004 10.6 11.6504 10.8 12.0504C10.95 12.3504 11.2 12.6504 11.45 12.8504C12.45 13.6504 13.95 13.5004 14.85 12.6004L18.6 8.85045C19.5 7.95045 19.65 6.45045 18.85 5.40045C17.9 4.25045 16.2 4.20045 15.15 5.20045L13.05 7.30045C12.65 7.70045 12.05 7.70045 11.65 7.30045C11.25 6.90045 11.25 6.30045 11.65 5.90045L13.65 3.90045C15.35 2.20045 18.1 2.00045 19.9 3.60045C21.9 5.35045 21.95 8.35045 20.1 10.1504L16.35 14.0004C14.65 15.7004 11.85 15.9004 10.05 14.2504Z"
+                                fill="white" />
+                            <path
+                                d="M3.64971 19.9006C2.04971 18.1006 2.29971 15.3506 3.94971 13.6506L7.19971 10.4006C9.29971 8.30062 12.0497 8.10062 13.8497 9.70062C14.2497 10.0506 14.5997 10.5006 14.8497 11.0006C15.1497 11.6006 14.7997 12.3006 14.1497 12.4506C13.6997 12.5506 13.2997 12.3006 13.0997 11.9506C12.9497 11.6506 12.6997 11.3506 12.4497 11.1506C11.4497 10.3506 9.99971 10.5006 9.04971 11.4006L5.29971 15.1506C4.39971 16.0506 4.19971 17.5506 5.04971 18.6006C5.99971 19.7506 7.69971 19.8006 8.74971 18.8006L10.8497 16.7006C11.2497 16.3006 11.8497 16.3006 12.2497 16.7006C12.6497 17.1006 12.6497 17.7006 12.2497 18.1006L10.1497 20.2006C8.39971 21.9506 5.39971 21.9006 3.64971 19.9006Z"
+                                fill="white" />
+                        </svg>
+                    </i>
+                </div>
+            </div>
+            <div class="title">
+                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                <span><input placeholder="请输入名称" [(ngModel)]="lesson.name" /></span>
+            </div>
+            <div class="opts">
+                <button nz-button nzValue="small" nzGhost (click)="onBack()">返回</button>
+                <button nz-button nzType="primary" nzValue="small" (click)="onSubmit()">保存</button>
+            </div>
+            <!-- <nz-divider nzType="vertical"></nz-divider>
+            <div nz-tooltip nzTooltipTitle="删除" (click)="onLayoutChange()">
+                <i nz-icon nzType="radar-chart" nzTheme="outline"></i>
+            </div> -->
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="col0">
+                    <div class="card">
+                        <div class="title1">词条类型<span>拖拽新建</span></div>
+                        <div class="one" *ngFor="let item of newNodes">
+                            <img [id]="item.id" [src]="item.icon" ondragstart="return false;" />
+                            <span>{{item.label}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col1">
+                    <div class="title">{{type}}</div>
+                    <div class="detail" *ngIf="type === BlurType.Canvas"></div>
+                    <div class="detail" *ngIf="type === BlurType.Node">
+                        <div class="input">
+                            <p>标题：</p><input nz-input placeholder="请输入标题" [(ngModel)]="nodeModel.label"
+                                (blur)="onBlurNodeLable($event)" />
+                        </div>
+                    </div>
+                    <div class="detail" *ngIf="type === BlurType.Edge">
+                        <div class="input">
+                            <p>标题：</p><input nz-input placeholder="请输入标题" [(ngModel)]="edgeModel.label"
+                                (blur)="onBlurEdgeLable($event)" />
+                        </div>
+                        <div class="input">关系连线处点击鼠标右键删除</div>
+                    </div>
+                </div>
+                <div class="col2">
+                    <div class="title">缩略图</div>
+                    <div class="detail"></div>
+                </div>
+            </div>
+            <div id="editor"></div>
+            <div class="searchBox" [ngStyle]="{right: searchVisible ? 0 : -300 + 'px'}">
+                <div class="title">
+                    <span>引用词条</span>
+                    <svg t="1605153247918" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="3060" width="20" height="20"
+                        (click)="searchVisible = false">
+                        <path
+                            d="M512 0c282.7648 0 512 229.2352 512 512s-229.2352 512-512 512S0 794.7648 0 512 229.2352 0 512 0z m-1.4848 450.978133L341.162667 281.6256a34.133333 34.133333 0 0 0-48.273067 0l-11.264 11.264a34.133333 34.133333 0 0 0 0 48.273067l169.352533 169.352533-169.352533 169.352533a34.133333 34.133333 0 0 0 0 48.273067l11.264 11.264a34.133333 34.133333 0 0 0 48.273067 0l169.352533-169.3568 169.352533 169.3568a34.133333 34.133333 0 0 0 48.273067 0l11.264-11.264a34.133333 34.133333 0 0 0 0-48.273067l-169.3568-169.352533 169.3568-169.352533a34.133333 34.133333 0 0 0 0-48.273067l-11.264-11.264a34.133333 34.133333 0 0 0-48.273067 0l-169.352533 169.352533z"
+                            p-id="3061"></path>
+                    </svg>
+                </div>
+                <div class="search">
+                    <!-- <nz-input-group [nzSuffix]="suffixIconSearch" [ngStyle]="{width: '100%'}">
+                        <input type="text" [(ngModel)]="searchName" (change)="onSearchList()" nz-input
+                            placeholder="搜索词条名称或标签" />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search" (click)="onSearchList()" [ngStyle]="{cursor: 'pointer'}"></i>
+                    </ng-template> -->
+                </div>
+                <div class="search-list">
+                    <div class="search-one" *ngFor="let item of entities" nz-tooltip [nzTooltipTitle]="item.name">
+                        <img [id]="item.uid" [src]="item.cover ? item.cover : '../../assets/icons/student_logo.png'"
+                            ondragstart="return false;" />
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
