@@ -1,0 +1,2 @@
+# ng-atlas-editor
+atlas
